@@ -1,24 +1,23 @@
-// Define regex patterns for common tap backs and reactions across platforms
-const tapBackPatterns = [
-    /^(Liked|Loved|Disliked|Laughed at|Emphasized|Questioned|Thumbs Up|Thumbs Down|Heart|Laughed|Exclamation|Question Mark|Haha|Wow|Sad|Angry|Care|Celebrate|Support|Insightful|Curious|Upvote|Downvote|Retweet|Quote Tweet) "(.+?)"$/,
-    /(Liked|Loved|Disliked|Laughed at|Emphasized|Questioned|Thumbs Up|Thumbs Down|Heart|Laughed|Exclamation|Question Mark|Haha|Wow|Sad|Angry|Care|Celebrate|Support|Insightful|Curious|Upvote|Downvote|Retweet|Quote Tweet) "(.+?)"$/
-];
+import re
 
-function filterTapBacks(message) {
-    // Remove tap backs using regex patterns
-    for (const pattern of tapBackPatterns) {
-        message = message.replace(pattern, "").trim();
-    }
-    return message;
-}
+# Define regex patterns for common tap backs and reactions across platforms
+tap_back_patterns = [
+    r'^(Liked|Loved|Disliked|Laughed at|Emphasized|Questioned|Thumbs Up|Thumbs Down|Heart|Laughed|Exclamation|Question Mark|Haha|Wow|Sad|Angry|Care|Celebrate|Support|Insightful|Curious|Upvote|Downvote|Retweet|Quote Tweet) "(.+?)"$',
+    r'(Liked|Loved|Disliked|Laughed at|Emphasized|Questioned|Thumbs Up|Thumbs Down|Heart|Laughed|Exclamation|Question Mark|Haha|Wow|Sad|Angry|Care|Celebrate|Support|Insightful|Curious|Upvote|Downvote|Retweet|Quote Tweet) "(.+?)"$'
+]
 
-function filterMessages(messages) {
-    // Apply filtering to each message and exclude empty results
-    return messages.map(filterTapBacks).filter(msg => msg);
-}
+def filter_tap_backs(message):
+    # Remove tap backs using regex patterns
+    for pattern in tap_back_patterns:
+        message = re.sub(pattern, '', message).strip()
+    return message
 
-// Example usage with input from BuildShip workflow
-const inputMessages = [
+def filter_messages(messages):
+    # Apply filtering to each message and exclude empty results
+    return [filter_tap_backs(msg) for msg in messages if filter_tap_backs(msg)]
+
+# Example usage with input messages
+input_messages = [
     "This is a sample message",
     "Liked \"This is a sample message\"",
     "Can we meet tomorrow?",
@@ -29,10 +28,10 @@ const inputMessages = [
     "Haha \"That's funny!\"",
     "Upvote \"This is useful\"",
     "Downvote \"I disagree\""
-];
+]
 
-const filteredMessages = filterMessages(inputMessages);
-console.log(filteredMessages);
+filtered_messages = filter_messages(input_messages)
+print(filtered_messages)
 
-// Output the filtered messages as the node result
-return { filteredMessages };
+# Output the filtered messages
+filtered_messages
